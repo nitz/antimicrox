@@ -54,7 +54,7 @@ jobs:
                 curl -L -o mingw-w64-x86_64-SDL2-2.0.20-1-any.pkg.tar.zst https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-SDL2-2.0.20-1-any.pkg.tar.zst
                 pacman --noconfirm -U mingw-w64-x86_64-SDL2-2.0.20-1-any.pkg.tar.zst
             
-            - name: Install Dependencies (msvc)
+            - name: Install sdl2 (msvc)
               if: startsWith(matrix.shell, 'cmd')
               run: |
                 curl -L -o SDL2-devel-2.0.20-VC.zip https://github.com/libsdl-org/SDL/releases/download/release-2.0.20/SDL2-devel-2.0.20-VC.zip
