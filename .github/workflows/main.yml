@@ -55,14 +55,10 @@ jobs:
             - name: Install Dependencies (msvc)
               if: startsWith(matrix.shell, 'cmd')
               run: |
-                echo Downloading...
                 curl -L -o SDL2-devel-2.0.20-VC.zip https://github.com/libsdl-org/SDL/releases/download/release-2.0.20/SDL2-devel-2.0.20-VC.zip
-                echo Unzipping...
                 unzip SDL2-devel-2.0.20-VC.zip
-                echo Moving...
                 mv "${{ github.workspace }}/SDL2-2.0.20" "${{ github.workspace }}/sdl2"
-                echo Linking... /J "${{ github.workspace }}\sdl2\include" "${{ github.workspace }}\sdl2\SDL2"
-                mklink /J "${{ github.workspace }}\sdl2\include" "${{ github.workspace }}\sdl2\SDL2"
+                mklink /J "${{ github.workspace }}\sdl2\SDL2" "${{ github.workspace }}\sdl2\include"
                 
             #- name: Add msbuild to PATH
             #  if: startsWith(matrix.shell, 'cmd')
