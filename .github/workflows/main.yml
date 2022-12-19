@@ -15,15 +15,15 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - name: Windows Server 2019 MinGW Debug
+                    - name: Windows Server 2019 MinGW
                       image: windows-2019
                       shell: msys2 {0}
                       build-type: Debug
                       experimental: false
-                    - name: Windows Server 2019 MSVC Debug
+                    - name: Windows Server 2019 MSVC
                       image: windows-2019
                       shell: cmd
-                      cmake-args: -G "Visual Studio 16 2019" "-DSDL2_PATH=${{ github.workspace }}/sdl2/" "-DSDL2_LIBRARY=${{ github.workspace }}/sdl2/lib/x64/SDL2.lib" "-DSDL2_INCLUDE_DIR=${{ github.workspace }}/sdl2/" "-DSDL2_DLL_LOCATION_DIR=${{ github.workspace }}/sdl2/lib/x64/SDL2.dll"
+                      cmake-args: -G "Visual Studio 16 2019" "-DSDL2_PATH=%WORKSPACE_DIR%/sdl2/" "-DSDL2_LIBRARY=%WORKSPACE_DIR%/sdl2/lib/x64/SDL2.lib" "-DSDL2_INCLUDE_DIR=%WORKSPACE_DIR%/sdl2/" "-DSDL2_DLL_LOCATION_DIR=%WORKSPACE_DIR%/sdl2/lib/x64/SDL2.dll"
                       build-type: Debug
                       experimental: true
         name: ${{ matrix.name }} ${{ matrix.build-type }}
@@ -84,6 +84,7 @@ jobs:
               run: cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -B "${{ github.workspace }}/build" ${{ matrix.cmake-args }}
               env:
                   CMAKE_PREFIX_PATH: ${{ env.Qt5_Dir }}
+                  WORKSPACE_DIR: ${{ github.workspace }}
               
             - name: Build
               run: cmake --build "${{ github.workspace }}/build" --parallel 8
