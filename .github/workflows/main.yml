@@ -61,7 +61,7 @@ jobs:
                 unzip SDL2-devel-2.0.20-VC.zip
                 echo Moving...
                 mv "${{ github.workspace }}/SDL2-2.0.20" "${{ github.workspace }}/sdl2"
-                echo Linking...
+                echo Linking... /J "${{ github.workspace }}\sdl2\include" "${{ github.workspace }}\sdl2\SDL2"
                 mklink /J "${{ github.workspace }}\sdl2\include" "${{ github.workspace }}\sdl2\SDL2"
                 
             #- name: Add msbuild to PATH
