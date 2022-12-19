@@ -6,59 +6,8 @@ concurrency:
 
 on:
     workflow_dispatch:
-    push:
-        branches: [ '*' ]
 
 jobs:
-    # Build job for Ubuntu
-    build-ubuntu:
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - name: Ubuntu 22-04 GCC
-                      image: ubuntu-22.04
-                      cc: gcc
-                      cxx: g++
-                      build-type: Debug
-                      experimental: false
-                    - name: Ubuntu 20-04 GCC
-                      image: ubuntu-20.04
-                      cc: gcc
-                      cxx: g++
-                      build-type: Debug
-                      experimental: false
-                    - name: Ubuntu 20-04 Clang
-                      image: ubuntu-20.04
-                      cc: clang
-                      cxx: clang++
-                      build-type: Debug
-                      experimental: true
-                    - name: Ubuntu 18-04 GCC (for AppImage comp)
-                      image: ubuntu-18.04
-                      cc: gcc
-                      cxx: g++
-                      build-type: Release
-                      experimental: false
-
-        name: ${{ matrix.name }} ${{ matrix.build-type }}
-        runs-on: ${{ matrix.image }}
-        continue-on-error: ${{ matrix.experimental }}
-
-        steps:
-            - uses: actions/checkout@v3
-
-            - name: Install Dependencies
-              run: sudo apt-get update && sudo apt-get install extra-cmake-modules qttools5-dev qttools5-dev-tools libsdl2-dev libxi-dev libxtst-dev libx11-dev itstool gettext ninja-build
-
-            - name: Configure CMake
-              run: cmake -GNinja -DCHECK_FOR_UPDATES=ON -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -B ${{ github.workspace }}/build
-              env:
-                  CXX: ${{ matrix.cxx }}
-                  CC: ${{ matrix.cc }}
-
-            - name: Build AntiMicroX
-              run: cmake --build ${{ github.workspace }}/build
 
     # Build job for Windows
     build-windows:
@@ -106,9 +55,13 @@ jobs:
             - name: Install Dependencies (msvc)
               if: startsWith(matrix.shell, 'cmd')
               run: |
+                echo Downloading...
                 curl -L -o SDL2-devel-2.0.20-VC.zip https://github.com/libsdl-org/SDL/releases/download/release-2.0.20/SDL2-devel-2.0.20-VC.zip
+                echo Unzipping...
                 unzip SDL2-devel-2.0.20-VC.zip
+                echo Moving...
                 mv "${{ github.workspace }}/SDL2-2.0.20" "${{ github.workspace }}/sdl2"
+                echo Linking...
                 mklink /J "${{ github.workspace }}\sdl2\include" "${{ github.workspace }}\sdl2\SDL2"
                 
             #- name: Add msbuild to PATH
