@@ -19,12 +19,14 @@ jobs:
                       image: windows-2019
                       shell: msys2 {0}
                       build-type: Debug
+                      qt-arch: "win64_mingw81"
                       experimental: false
                     - name: Windows Server 2019 MSVC
                       image: windows-2019
                       shell: cmd
                       cmake-args: -G "Visual Studio 16 2019" "-DSDL2_PATH=%WORKSPACE_DIR%/sdl2/" "-DSDL2_LIBRARY=%WORKSPACE_DIR%/sdl2/lib/x64/SDL2.lib" "-DSDL2_INCLUDE_DIR=%WORKSPACE_DIR%/sdl2/" "-DSDL2_DLL_LOCATION_DIR=%WORKSPACE_DIR%/sdl2/lib/x64/SDL2.dll"
                       build-type: Debug
+                      qt-arch: "win64_msvc2019_64"
                       experimental: true
         name: ${{ matrix.name }} ${{ matrix.build-type }}
         runs-on: ${{ matrix.image }}
@@ -76,7 +78,7 @@ jobs:
                   version: "5.15.2"
                   host: "windows"
                   target: "desktop"
-                  arch: "win64_mingw81"
+                  arch: ${{ matrix.qt-arch }}
                   dir: "${{ github.workspace }}/qt/"
                   install-deps: "true"
               
